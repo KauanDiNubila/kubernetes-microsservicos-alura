@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: leonardosartorello/java-gateway-k8s:v3
+        image: kaauandi/alurafood-gateway:v1
         ports:
         - containerPort: 8082
         env:
@@ -45,7 +45,7 @@ spec:
       hostname: pagamentos-ms
       containers:
       - name: pagamentos
-        image: leonardosartorello/java-pagamentos-k8s:v3
+        image: kaauandi/alurafood-pagamentos:v1
         ports:
         - containerPort: 40000
         env:
@@ -89,7 +89,7 @@ spec:
       hostname: pedidos-ms
       containers:
       - name: pedidos
-        image: leonardosartorello/java-pedidos-k8s:v3
+        image: kaauandi/alurafood-pedidos:v1
         ports:
         - containerPort: 40001
         env:
@@ -133,7 +133,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: server
-        image: leonardosartorello/java-server-k8s:v3
+        image: kaauandi/alurafood-server:v1
         ports:
         - containerPort: 8081
           name: server
