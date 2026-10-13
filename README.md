@@ -95,6 +95,17 @@ minikube tunnel
 
 Com o túnel ativo, o painel do Eureka fica em `http://localhost:8081` e o gateway em `http://localhost:8082`.
 
+### Em outro cluster (kind, por exemplo)
+
+O deploy também foi testado no [kind](https://kind.sigs.k8s.io). As diferenças em relação ao minikube:
+
+- Troque o `storageClassName` em `k8s/volumes.yaml` por uma classe que exista no cluster (no kind, `standard`)
+- No lugar do `minikube tunnel`, use `port-forward`:
+
+```bash
+kubectl port-forward svc/loadbalancer-gateway 8082:8082
+```
+
 ## Endpoints
 
 As rotas do gateway seguem o nome do serviço registrado no Eureka.
@@ -144,6 +155,7 @@ Troque `pedidos` por `pagamentos`, `server` ou `gateway` para os outros serviço
 
 - Adicionei `startupProbe`, `readinessProbe` e `livenessProbe` em todos os containers, usando os endpoints de health do Actuator
 - Defini `requests` e `limits` de CPU e memória e ajustei o heap da JVM ao limite do container
+- Adicionei um `initContainer` em `pedidos` e `pagamentos` que espera o MySQL responder, para os pods não reiniciarem enquanto o banco sobe
 - Corrigi o `containerPort` do `gateway` e do `pagamentos`, que não batiam com a porta real das aplicações
 - Publiquei as imagens na minha conta do Docker Hub, no lugar das imagens do curso
 - Tirei o `Secret` com a senha do banco do versionamento e deixei um modelo (`secrets.example.yaml`)

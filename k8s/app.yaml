@@ -22,29 +22,32 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 256Mi
+            memory: 384Mi
           limits:
             cpu: "1"
-            memory: 512Mi
+            memory: 768Mi
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8082
           periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 36
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8082
           periodSeconds: 10
+          timeoutSeconds: 3
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8082
           periodSeconds: 10
+          timeoutSeconds: 3
         env:
         - name: JAVA_TOOL_OPTIONS
-          value: "-XX:MaxRAMPercentage=70"
+          value: "-XX:MaxRAMPercentage=50"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -68,6 +71,10 @@ spec:
         app: pagamentos
     spec:
       hostname: pagamentos-ms
+      initContainers:
+      - name: aguarda-mysql
+        image: busybox:1.36
+        command: ["sh", "-c", "until nc -z mysql 3306; do sleep 2; done"]
       containers:
       - name: pagamentos
         image: kaauandi/alurafood-pagamentos:v2
@@ -76,29 +83,32 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 256Mi
+            memory: 384Mi
           limits:
             cpu: "1"
-            memory: 512Mi
+            memory: 768Mi
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 40000
           periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 36
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 40000
           periodSeconds: 10
+          timeoutSeconds: 3
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 40000
           periodSeconds: 10
+          timeoutSeconds: 3
         env:
         - name: JAVA_TOOL_OPTIONS
-          value: "-XX:MaxRAMPercentage=70"
+          value: "-XX:MaxRAMPercentage=50"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -137,6 +147,10 @@ spec:
         app: pedidos
     spec:
       hostname: pedidos-ms
+      initContainers:
+      - name: aguarda-mysql
+        image: busybox:1.36
+        command: ["sh", "-c", "until nc -z mysql 3306; do sleep 2; done"]
       containers:
       - name: pedidos
         image: kaauandi/alurafood-pedidos:v2
@@ -145,29 +159,32 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 256Mi
+            memory: 384Mi
           limits:
             cpu: "1"
-            memory: 512Mi
+            memory: 768Mi
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 40001
           periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 36
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 40001
           periodSeconds: 10
+          timeoutSeconds: 3
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 40001
           periodSeconds: 10
+          timeoutSeconds: 3
         env:
         - name: JAVA_TOOL_OPTIONS
-          value: "-XX:MaxRAMPercentage=70"
+          value: "-XX:MaxRAMPercentage=50"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -215,29 +232,32 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 256Mi
+            memory: 384Mi
           limits:
             cpu: "1"
-            memory: 512Mi
+            memory: 768Mi
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8081
           periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 36
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8081
           periodSeconds: 10
+          timeoutSeconds: 3
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8081
           periodSeconds: 10
+          timeoutSeconds: 3
         env:
         - name: JAVA_TOOL_OPTIONS
-          value: "-XX:MaxRAMPercentage=70"
+          value: "-XX:MaxRAMPercentage=50"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:

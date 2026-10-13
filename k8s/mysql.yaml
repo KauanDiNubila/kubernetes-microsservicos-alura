@@ -32,15 +32,18 @@ spec:
           tcpSocket:
             port: 3306
           periodSeconds: 5
+          timeoutSeconds: 3
           failureThreshold: 36
         readinessProbe:
           tcpSocket:
             port: 3306
           periodSeconds: 10
+          timeoutSeconds: 3
         livenessProbe:
           tcpSocket:
             port: 3306
           periodSeconds: 10
+          timeoutSeconds: 3
         volumeMounts:
         - name: mysql-pv
           mountPath: /var/lib/mysql
