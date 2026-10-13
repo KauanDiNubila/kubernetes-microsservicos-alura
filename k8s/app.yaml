@@ -18,7 +18,7 @@ spec:
       - name: gateway
         image: leonardosartorello/java-gateway-k8s:v3
         ports:
-        - containerPort: 80
+        - containerPort: 8082
         env:
         - name: SERVER_HOST
           valueFrom:
@@ -47,7 +47,7 @@ spec:
       - name: pagamentos
         image: leonardosartorello/java-pagamentos-k8s:v3
         ports:
-        - containerPort: 4000
+        - containerPort: 40000
         env:
         - name: SERVER_HOST
           valueFrom:
