@@ -1,0 +1,16 @@
+target/
+*.log
+
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+k8s/secrets.yaml
+
+.DS_Store
+Thumbs.db
