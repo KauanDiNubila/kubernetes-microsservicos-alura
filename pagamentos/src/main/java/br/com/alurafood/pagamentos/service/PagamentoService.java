@@ -4,27 +4,24 @@ import br.com.alurafood.pagamentos.dto.PagamentoDto;
 import br.com.alurafood.pagamentos.http.PedidoClient;
 import br.com.alurafood.pagamentos.model.Pagamento;
 import br.com.alurafood.pagamentos.model.Status;
-import br.com.alurafood.pagamentos.repository.PagamentoRepositoy;
+import br.com.alurafood.pagamentos.repository.PagamentoRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PagamentoService {
 
-    @Autowired
-    private PagamentoRepositoy repository;
+    private final PagamentoRepository repository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private PedidoClient pedido;
+    private final PedidoClient pedido;
 
 
     public Page<PagamentoDto> obterTodos(Pageable paginacao) {
@@ -34,8 +31,7 @@ public class PagamentoService {
     }
 
     public PagamentoDto obterPorId(Long id) {
-        Pagamento pagamento = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException());
+        Pagamento pagamento = buscarPagamento(id);
 
         return modelMapper.map(pagamento, PagamentoDto.class);
     }
@@ -49,39 +45,39 @@ public class PagamentoService {
     }
 
     public PagamentoDto atualizarPagamento(Long id, PagamentoDto dto) {
+        Pagamento existente = buscarPagamento(id);
         Pagamento pagamento = modelMapper.map(dto, Pagamento.class);
         pagamento.setId(id);
+        if (pagamento.getStatus() == null) {
+            pagamento.setStatus(existente.getStatus());
+        }
         pagamento = repository.save(pagamento);
         return modelMapper.map(pagamento, PagamentoDto.class);
     }
 
     public void excluirPagamento(Long id) {
-        repository.deleteById(id);
+        repository.delete(buscarPagamento(id));
     }
 
     public void confirmarPagamento(Long id){
-        Optional<Pagamento> pagamento = repository.findById(id);
+        Pagamento pagamento = buscarPagamento(id);
 
-        if (!pagamento.isPresent()) {
-            throw new EntityNotFoundException();
-        }
-
-        pagamento.get().setStatus(Status.CONFIRMADO);
-        repository.save(pagamento.get());
-        pedido.atualizaPagamento(pagamento.get().getPedidoId());
+        pagamento.setStatus(Status.CONFIRMADO);
+        repository.save(pagamento);
+        pedido.atualizaPagamento(pagamento.getPedidoId());
     }
 
 
     public void alteraStatus(Long id) {
-        Optional<Pagamento> pagamento = repository.findById(id);
+        Pagamento pagamento = buscarPagamento(id);
 
-        if (!pagamento.isPresent()) {
-            throw new EntityNotFoundException();
-        }
-
-        pagamento.get().setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
-        repository.save(pagamento.get());
+        pagamento.setStatus(Status.CONFIRMADO_SEM_INTEGRACAO);
+        repository.save(pagamento);
 
     }
-}
 
+    private Pagamento buscarPagamento(Long id) {
+        return repository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+}
