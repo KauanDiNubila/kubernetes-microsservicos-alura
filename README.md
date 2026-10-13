@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/KauanDiNubila/kubernetes-microsservicos-alura/actions/workflows/ci.yml/badge.svg)](https://github.com/KauanDiNubila/kubernetes-microsservicos-alura/actions/workflows/ci.yml)
 
-Projeto de estudo desenvolvido durante o curso de Kubernetes com microsserviços Java da [Alura](https://www.alura.com.br). O código das aplicações (Alura Food) é o material base do curso; o foco do repositório é a parte de Kubernetes: empacotar os serviços em imagens Docker e subir tudo em um cluster.
+Projeto de estudo desenvolvido durante o curso [Kubernetes e microsserviços: subindo e gerenciando a aplicação](https://cursos.alura.com.br/course/kubernetes-microsservicos-subindo-gerenciando-aplicacao), da Alura. O código das aplicações (Alura Food) é o material base do curso; o foco do repositório é a parte de Kubernetes: empacotar os serviços em imagens Docker e subir tudo em um cluster.
 
 ## O que foi praticado
 
@@ -170,4 +170,4 @@ Troque `pedidos` por `pagamentos`, `server` ou `gateway` para os outros serviço
 - Troquei os testes que só subiam o contexto (e exigiam MySQL) por testes de service e de controller
 ## Créditos
 
-Aplicação Alura Food e roteiro do curso: [Alura](https://www.alura.com.br).
+Aplicação Alura Food e roteiro do curso: [Alura](https://cursos.alura.com.br/course/kubernetes-microsservicos-subindo-gerenciando-aplicacao).
