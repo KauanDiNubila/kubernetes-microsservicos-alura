@@ -16,10 +16,35 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: kaauandi/alurafood-gateway:v1
+        image: kaauandi/alurafood-gateway:v2
         ports:
         - containerPort: 8082
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8082
+          periodSeconds: 5
+          failureThreshold: 36
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8082
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8082
+          periodSeconds: 10
         env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:MaxRAMPercentage=70"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -45,10 +70,35 @@ spec:
       hostname: pagamentos-ms
       containers:
       - name: pagamentos
-        image: kaauandi/alurafood-pagamentos:v1
+        image: kaauandi/alurafood-pagamentos:v2
         ports:
         - containerPort: 40000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 40000
+          periodSeconds: 5
+          failureThreshold: 36
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 40000
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 40000
+          periodSeconds: 10
         env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:MaxRAMPercentage=70"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -89,10 +139,35 @@ spec:
       hostname: pedidos-ms
       containers:
       - name: pedidos
-        image: kaauandi/alurafood-pedidos:v1
+        image: kaauandi/alurafood-pedidos:v2
         ports:
         - containerPort: 40001
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 40001
+          periodSeconds: 5
+          failureThreshold: 36
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 40001
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 40001
+          periodSeconds: 10
         env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:MaxRAMPercentage=70"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
@@ -133,11 +208,36 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: server
-        image: kaauandi/alurafood-server:v1
+        image: kaauandi/alurafood-server:v2
         ports:
         - containerPort: 8081
           name: server
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          periodSeconds: 5
+          failureThreshold: 36
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8081
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          periodSeconds: 10
         env:
+        - name: JAVA_TOOL_OPTIONS
+          value: "-XX:MaxRAMPercentage=70"
         - name: SERVER_HOST
           valueFrom:
             configMapKeyRef:
