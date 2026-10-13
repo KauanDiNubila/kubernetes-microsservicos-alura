@@ -10,6 +10,7 @@ Projeto de estudo desenvolvido durante o curso de Kubernetes com microsserviços
 - `Service` headless para descoberta entre pods e `LoadBalancer` para acesso externo
 - `ConfigMap` e `Secret` injetados como variáveis de ambiente
 - `PersistentVolumeClaim` para os dados do MySQL
+- `startupProbe`, `readinessProbe` e `livenessProbe` com o Spring Boot Actuator, e `requests`/`limits` de CPU e memória
 
 ## Arquitetura
 
@@ -116,10 +117,10 @@ As rotas do gateway seguem o nome do serviço registrado no Eureka.
 
 As imagens usadas nos manifests foram construídas a partir dos Dockerfiles deste repositório e estão no Docker Hub:
 
-- `kaauandi/alurafood-server:v1`
-- `kaauandi/alurafood-gateway:v1`
-- `kaauandi/alurafood-pedidos:v1`
-- `kaauandi/alurafood-pagamentos:v1`
+- `kaauandi/alurafood-server:v2`
+- `kaauandi/alurafood-gateway:v2`
+- `kaauandi/alurafood-pedidos:v2`
+- `kaauandi/alurafood-pagamentos:v2`
 
 Para gerar uma imagem localmente:
 
@@ -127,12 +128,32 @@ Para gerar uma imagem localmente:
 docker build -t alurafood-pedidos pedidos
 ```
 
+## Testes
+
+Os testes de `pedidos` e `pagamentos` cobrem as regras dos services e as respostas HTTP dos controllers (201, 400 e 404) e não dependem de banco de dados. Para rodar sem instalar Maven nem Java 17:
+
+```bash
+docker run --rm -v "$PWD/pedidos:/app" -w /app maven:3.9.6-eclipse-temurin-17-focal mvn test
+```
+
+Troque `pedidos` por `pagamentos`, `server` ou `gateway` para os outros serviços.
+
 ## O que mudei em relação ao material do curso
 
+**Kubernetes**
+
+- Adicionei `startupProbe`, `readinessProbe` e `livenessProbe` em todos os containers, usando os endpoints de health do Actuator
+- Defini `requests` e `limits` de CPU e memória e ajustei o heap da JVM ao limite do container
 - Corrigi o `containerPort` do `gateway` e do `pagamentos`, que não batiam com a porta real das aplicações
 - Publiquei as imagens na minha conta do Docker Hub, no lugar das imagens do curso
 - Tirei o `Secret` com a senha do banco do versionamento e deixei um modelo (`secrets.example.yaml`)
 
+**Aplicações**
+
+- As validações passaram a valer na entrada da API: antes ficavam só nas entidades e um corpo inválido virava erro 500
+- Recurso inexistente agora devolve 404 e erro de validação devolve 400 com a lista de campos
+- Atualizar um pagamento sem informar o status mantém o status atual
+- Troquei os testes que só subiam o contexto (e exigiam MySQL) por testes de service e de controller
 ## Créditos
 
 Aplicação Alura Food e roteiro do curso: [Alura](https://www.alura.com.br).
