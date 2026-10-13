@@ -1,5 +1,7 @@
 # Kubernetes com microsserviços — Alura Food
 
+[![CI](https://github.com/KauanDiNubila/kubernetes-microsservicos-alura/actions/workflows/ci.yml/badge.svg)](https://github.com/KauanDiNubila/kubernetes-microsservicos-alura/actions/workflows/ci.yml)
+
 Projeto de estudo desenvolvido durante o curso de Kubernetes com microsserviços Java da [Alura](https://www.alura.com.br). O código das aplicações (Alura Food) é o material base do curso; o foco do repositório é a parte de Kubernetes: empacotar os serviços em imagens Docker e subir tudo em um cluster.
 
 ## O que foi praticado
